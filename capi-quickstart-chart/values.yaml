@@ -1,0 +1,50 @@
+# Default values for capi-quickstart
+cluster:
+  name: capi-quickstart
+  namespace: default
+
+clusterNetwork:
+  pods:
+    cidrBlocks:
+      - 192.168.0.0/16
+  serviceDomain: cluster.local
+  services:
+    cidrBlocks:
+      - 10.128.0.0/12
+
+controlPlane:
+  replicas: 1
+
+workers:
+  replicas: 1
+
+kubernetesVersion: v1.35.0
+
+# Variables for ClusterClass
+imageRepository: ""
+etcdImageTag: ""
+coreDNSImageTag: ""
+
+podSecurityStandard:
+  enabled: true
+  enforce: baseline
+  audit: restricted
+  warn: restricted
+
+# Docker machine configuration
+dockerMachine:
+  extraMounts:
+    - containerPath: /var/run/docker.sock
+      hostPath: /var/run/docker.sock
+
+# Kubelet configuration
+kubelet:
+  evictionHard: "nodefs.available<0%,nodefs.inodesFree<0%,imagefs.available<0%"
+
+# API Server configuration
+apiServer:
+  certSANs:
+    - localhost
+    - 127.0.0.1
+    - 0.0.0.0
+    - host.docker.internal
