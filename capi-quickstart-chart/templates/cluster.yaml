@@ -1,3 +1,5 @@
+{{- $controlPlaneRandom := randNumeric 8 -}}
+{{- $workerRandom := randNumeric 8 -}}
 apiVersion: cluster.x-k8s.io/v1beta2
 kind: ClusterClass
 metadata:
@@ -25,7 +27,7 @@ spec:
       templateRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
         kind: DockerMachineTemplate
-        name: quick-start-control-plane-{{ randNumeric 8 }}
+        name: quick-start-control-plane-{{ $controlPlaneRandom }}
     templateRef:
       apiVersion: controlplane.cluster.x-k8s.io/v1beta2
       kind: KubeadmControlPlaneTemplate
@@ -249,7 +251,7 @@ spec:
         templateRef:
           apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
           kind: DockerMachineTemplate
-          name: quick-start-default-worker-machinetemplate-{{ randNumeric 8 }}
+          name: quick-start-default-worker-machinetemplate-{{ $workerRandom }}
     machinePools:
     - bootstrap:
         templateRef:
@@ -302,7 +304,7 @@ spec:
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
 kind: DockerMachineTemplate
 metadata:
-  name: quick-start-control-plane-{{ randNumeric 8 }}
+  name: quick-start-control-plane-{{ $controlPlaneRandom }}
   namespace: default
 spec:
   template:
@@ -314,7 +316,7 @@ spec:
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
 kind: DockerMachineTemplate
 metadata:
-  name: quick-start-default-worker-machinetemplate-{{ randNumeric 8 }}
+  name: quick-start-default-worker-machinetemplate-{{ $workerRandom }}
   namespace: default
 spec:
   template:
