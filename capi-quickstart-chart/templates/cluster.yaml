@@ -48,7 +48,7 @@ spec:
         matchResources:
           controlPlane: true
     description: Sets the imageRepository used for the KubeadmControlPlane.
-    enabledIf: '{{ ne .imageRepository "" }}'
+    enabledIf: '{{`{{ ne .imageRepository "" }}`}}'
     name: imageRepository
   - definitions:
     - jsonPatches:
@@ -57,14 +57,14 @@ spec:
         valueFrom:
           template: |
             local:
-              imageTag: {{ .etcdImageTag }}
+              imageTag: {{`{{ .etcdImageTag }}`}}
       selector:
         apiVersion: controlplane.cluster.x-k8s.io/v1beta2
         kind: KubeadmControlPlaneTemplate
         matchResources:
           controlPlane: true
     description: Sets tag to use for the etcd image in the KubeadmControlPlane.
-    enabledIf: '{{ ne .etcdImageTag "" }}'
+    enabledIf: '{{`{{ ne .etcdImageTag "" }}`}}'
     name: etcdImageTag
   - definitions:
     - jsonPatches:
@@ -72,14 +72,14 @@ spec:
         path: /spec/template/spec/kubeadmConfigSpec/clusterConfiguration/dns
         valueFrom:
           template: |
-            imageTag: {{ .coreDNSImageTag }}
+            imageTag: {{`{{ .coreDNSImageTag }}`}}
       selector:
         apiVersion: controlplane.cluster.x-k8s.io/v1beta2
         kind: KubeadmControlPlaneTemplate
         matchResources:
           controlPlane: true
     description: Sets tag to use for the etcd image in the KubeadmControlPlane.
-    enabledIf: '{{ ne .coreDNSImageTag "" }}'
+    enabledIf: '{{`{{ ne .coreDNSImageTag "" }}`}}'
     name: coreDNSImageTag
   - definitions:
     - jsonPatches:
@@ -87,7 +87,7 @@ spec:
         path: /spec/template/spec/customImage
         valueFrom:
           template: |
-            kindest/node:{{ .builtin.machineDeployment.version | replace "+" "_" }}
+            kindest/node:{{`{{ .builtin.machineDeployment.version | replace "+" "_" }}`}}
       selector:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
         kind: DockerMachineTemplate
@@ -100,7 +100,7 @@ spec:
         path: /spec/template/spec/template/customImage
         valueFrom:
           template: |
-            kindest/node:{{ .builtin.machinePool.version | replace "+" "_" }}
+            kindest/node:{{`{{ .builtin.machinePool.version | replace "+" "_" }}`}}
       selector:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
         kind: DockerMachinePoolTemplate
@@ -113,7 +113,7 @@ spec:
         path: /spec/template/spec/customImage
         valueFrom:
           template: |
-            kindest/node:{{ .builtin.controlPlane.version | replace "+" "_" }}
+            kindest/node:{{`{{ .builtin.controlPlane.version | replace "+" "_" }}`}}
       selector:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
         kind: DockerMachineTemplate
@@ -147,14 +147,14 @@ spec:
                 plugins:
                 - name: PodSecurity
                   configuration:
-                    apiVersion: pod-security.admission.config.k8s.io/v1{{ if semverCompare "< v1.25-0" .builtin.controlPlane.version }}beta1{{ end }}
+                    apiVersion: pod-security.admission.config.k8s.io/v1{{`{{ if semverCompare "< v1.25-0" .builtin.controlPlane.version }}beta1{{ end }}`}}
                     kind: PodSecurityConfiguration
                     defaults:
-                      enforce: "{{ .podSecurityStandard.enforce }}"
+                      enforce: "{{`{{ .podSecurityStandard.enforce }}`}}"
                       enforce-version: "latest"
-                      audit: "{{ .podSecurityStandard.audit }}"
+                      audit: "{{`{{ .podSecurityStandard.audit }}`}}"
                       audit-version: "latest"
-                      warn: "{{ .podSecurityStandard.warn }}"
+                      warn: "{{`{{ .podSecurityStandard.warn }}`}}"
                       warn-version: "latest"
                     exemptions:
                       usernames: []
@@ -167,7 +167,7 @@ spec:
         matchResources:
           controlPlane: true
     description: Adds an admission configuration for PodSecurity to the kube-apiserver.
-    enabledIf: '{{ .podSecurityStandard.enabled }}'
+    enabledIf: '{{`{{ .podSecurityStandard.enabled }}`}}'
     name: podSecurityStandard
   variables:
   - name: imageRepository
